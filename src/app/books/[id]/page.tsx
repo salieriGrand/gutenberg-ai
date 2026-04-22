@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Chat from '@/components/Chat';
+import { createClient } from '@/utils/supabase/server';
 
 export default async function BookDetailsPage({
   params,
@@ -19,6 +20,8 @@ export default async function BookDetailsPage({
   }
 
   const book = await res.json();
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
   return (
     <div className="flex flex-col items-center min-h-screen p-8 bg-gray-50 text-black">
@@ -98,7 +101,16 @@ export default async function BookDetailsPage({
 
         <div id="chat-section" className="mt-12 border-t pt-8">
           <h2 className="text-2xl font-bold mb-4">Discuss this Book</h2>
-          <Chat bookContext={book} />
+          {user ? (
+            <Chat bookContext={book} />
+          ) : (
+            <div className="bg-gray-100 p-6 rounded-lg text-center text-gray-700">
+              <p className="mb-4">Please log in to use the chatbot to discuss this book.</p>
+              <Link href="/login" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors inline-block">
+                Log In
+              </Link>
+            </div>
+          )}
         </div>
       </main>
     </div>
