@@ -76,10 +76,11 @@ export default async function BookDetailsPage({
               <div className="flex flex-wrap gap-2">
                 {Object.entries(book.formats).map(([format, url]) => {
                   if (typeof url === 'string' && (format.includes('html') || format.includes('epub') || format.includes('plain'))) {
+                    const proxyUrl = url.replace('https://www.gutenberg.org/', '/read/');
                     return (
                       <a
                         key={format}
-                        href={url}
+                        href={proxyUrl}
                         target="_blank"
                         rel="noreferrer"
                         className="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors"
