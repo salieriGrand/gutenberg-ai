@@ -12,19 +12,6 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
    SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
    GOOGLE_GEMINI_API_KEY=your_google_gemini_api_key
    ```
-   You can obtain a Google Gemini API key from the [Google AI Studio](https://aistudio.google.com/app/apikey).
-
-   To verify your key is working, you can run:
-   ```bash
-   curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent" \     -H 'Content-Type: application/json' \
-     -H 'X-goog-api-key: YOUR_API_KEY' \
-     -X POST \
-     -d '{
-       "contents": [{
-         "parts":[{"text": "Explain how AI works in a few words"}]
-       }]
-     }'
-   ```
 
 ### Installation
 

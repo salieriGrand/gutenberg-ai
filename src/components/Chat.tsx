@@ -45,10 +45,10 @@ export default function Chat({ bookContext }: { bookContext: { title: string; au
               className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                 m.role === 'user'
                   ? 'bg-blue-600 text-white rounded-br-none'
-                  : 'bg-gray-100 text-black rounded-bl-none'
+                  : 'bg-gray-100 text-gray-800 rounded-bl-none'
               }`}
             >
-              <div className="prose prose-sm max-w-none dark:prose-invert">
+              <div className={`prose prose-sm max-w-none ${m.role === 'user' ? 'text-white' : 'text-gray-800'}`}>
                 <ReactMarkdown>{m.content}</ReactMarkdown>
               </div>
             </div>

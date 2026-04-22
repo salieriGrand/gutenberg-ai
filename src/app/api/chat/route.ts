@@ -26,7 +26,7 @@ Answer user questions about this book based on the provided context and your gen
   const coreMessages = [systemMessage, ...messages];
 
   const result = await streamText({
-    model: google('models/gemini-3.1-flash-lite-preview'),
+    model: google('models/gemini-1.5-pro-latest'),
     messages: coreMessages,
   });
 
