@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getCachedBooks, setCachedBooks } from '@/utils/cache';
 
 export default async function Home({
   searchParams,
@@ -7,14 +8,27 @@ export default async function Home({
 }) {
   const { query } = await searchParams;
   const searchQuery = query || '';
+  
+  let books = [];
 
-  const url = searchQuery
-    ? `https://gutendex.com/books/?search=${encodeURIComponent(searchQuery)}`
-    : `https://gutendex.com/books/`;
-
-  const res = await fetch(url);
-  const data = await res.json();
-  const books = data.results || [];
+  if (!searchQuery) {
+    const cachedData = await getCachedBooks();
+    if (cachedData) {
+      books = cachedData;
+    } else {
+      const res = await fetch('https://gutendex.com/books/');
+      const data = await res.json();
+      books = data.results || [];
+      if (books.length > 0) {
+        await setCachedBooks(books);
+      }
+    }
+  } else {
+    const url = `https://gutendex.com/books/?search=${encodeURIComponent(searchQuery)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    books = data.results || [];
+  }
 
   return (
     <div className="flex flex-col items-center min-h-screen p-8 pb-20 gap-8 bg-gray-50 text-black">
