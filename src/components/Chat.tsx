@@ -20,7 +20,7 @@ export default function Chat({ bookContext }: { bookContext: { title: string; au
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-[500px] border rounded-xl overflow-hidden bg-white shadow-inner">
+    <div className="flex flex-col h-full border rounded-xl overflow-hidden bg-white shadow-inner">
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && (
           <div className="text-center text-gray-500 mt-10">
@@ -45,10 +45,10 @@ export default function Chat({ bookContext }: { bookContext: { title: string; au
               className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                 m.role === 'user'
                   ? 'bg-blue-600 text-white rounded-br-none'
-                  : 'bg-gray-100 text-black rounded-bl-none'
+                  : 'bg-gray-100 text-gray-800 rounded-bl-none'
               }`}
             >
-              <div className="prose prose-sm max-w-none dark:prose-invert">
+              <div className={`prose prose-sm max-w-none ${m.role === 'user' ? 'text-white' : 'text-gray-800'}`}>
                 <ReactMarkdown>{m.content}</ReactMarkdown>
               </div>
             </div>
