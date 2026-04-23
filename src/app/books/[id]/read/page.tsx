@@ -29,9 +29,14 @@ export default async function ReadBookPage({
   const book = await res.json();
 
   // Find the HTML format URL to embed
-  const htmlFormatUrl = Object.entries(book.formats).find(([format, url]) =>
+  let htmlFormatUrl = Object.entries(book.formats).find(([format, url]) =>
     typeof url === 'string' && format.includes('text/html')
   )?.[1] as string | undefined;
+
+  // Ensure HTTPS for mixed content issues
+  if (htmlFormatUrl?.startsWith('http://')) {
+    htmlFormatUrl = htmlFormatUrl.replace('http://', 'https://');
+  }
 
   if (!htmlFormatUrl) {
     return (
