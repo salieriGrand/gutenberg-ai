@@ -1,7 +1,12 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 
-const CACHE_DIR = path.join(process.cwd(), '.cache');
+// Use /tmp in serverless environments (like Vercel) which is writable
+const CACHE_DIR = process.env.NODE_ENV === 'production' 
+  ? path.join(os.tmpdir(), 'gutenberg-cache')
+  : path.join(process.cwd(), '.cache');
+
 const CACHE_FILE = path.join(CACHE_DIR, 'books_default.json');
 const CACHE_TTL = 3600 * 1000; // 1 hour
 
