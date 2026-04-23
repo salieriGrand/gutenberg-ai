@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Chat from '@/components/Chat';
 import { createClient } from '@/utils/supabase/server';
 
 export default async function BookDetailsPage({
@@ -76,41 +75,23 @@ export default async function BookDetailsPage({
 
             <div>
               <h2 className="text-xl font-semibold text-gray-700 mt-4 mb-2">Read Online</h2>
-              <div className="flex flex-wrap gap-2">
-                {Object.entries(book.formats).map(([format, url]) => {
-                  if (typeof url === 'string' && (format.includes('html') || format.includes('epub') || format.includes('plain'))) {
-                    const proxyUrl = url.replace('https://www.gutenberg.org/', '/read/');
-                    return (
-                      <a
-                        key={format}
-                        href={proxyUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors"
-                      >
-                        {format.split('/')[1] || format}
-                      </a>
-                    );
-                  }
-                  return null;
-                })}
-              </div>
+              {user ? (
+                <Link
+                  href={`/books/${id}/read`}
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors inline-block font-semibold"
+                >
+                  Read Book & Chat
+                </Link>
+              ) : (
+                <div className="bg-gray-100 p-4 rounded-lg inline-block border border-gray-200">
+                  <p className="text-gray-700 mb-2">Login to read this book online and discuss it with our AI.</p>
+                  <Link href="/login" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors inline-block text-sm">
+                    Log In to Read
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
-        </div>
-
-        <div id="chat-section" className="mt-12 border-t pt-8">
-          <h2 className="text-2xl font-bold mb-4">Discuss this Book</h2>
-          {user ? (
-            <Chat bookContext={book} />
-          ) : (
-            <div className="bg-gray-100 p-6 rounded-lg text-center text-gray-700">
-              <p className="mb-4">Please log in to use the chatbot to discuss this book.</p>
-              <Link href="/login" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors inline-block">
-                Log In
-              </Link>
-            </div>
-          )}
         </div>
       </main>
     </div>
