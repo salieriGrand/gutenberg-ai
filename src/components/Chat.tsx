@@ -77,13 +77,13 @@ export default function Chat({ bookContext }: { bookContext: { title: string; au
 
       <form
         onSubmit={handleSubmit}
-        className="p-3 border-t bg-gray-50 flex gap-2"
+        className="p-3 border-t bg-white flex gap-2"
       >
         <input
           value={input}
           onChange={handleInputChange}
           placeholder="Ask a question..."
-          className="flex-1 border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder:text-gray-500"
           disabled={isLoading}
         />
         <button

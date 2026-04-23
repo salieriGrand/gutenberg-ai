@@ -27,9 +27,9 @@ export default async function Home({
             name="query"
             defaultValue={searchQuery}
             placeholder="Search for books, authors..."
-            className="flex-1 border p-2 rounded-lg"
+            className="flex-1 border border-gray-300 p-2 rounded-lg text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
           />
-          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-semibold shadow-sm transition-colors">
             Search
           </button>
         </form>
@@ -37,8 +37,8 @@ export default async function Home({
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
           {books.map((book: { id: string | number; title: string; formats: Record<string, string>; authors: Array<{ name: string }> }) => (
             <Link key={book.id} href={`/books/${book.id}`} className="group">
-              <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 h-full flex flex-col items-center">
-                <div className="w-32 h-48 bg-gray-200 mb-4 overflow-hidden rounded relative flex-shrink-0">
+              <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 h-full flex flex-col items-center border border-gray-100">
+                <div className="w-32 h-48 bg-gray-200 mb-4 overflow-hidden rounded relative flex-shrink-0 shadow-inner">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={book.formats['image/jpeg'] || 'https://via.placeholder.com/128x192?text=No+Cover'}
@@ -46,15 +46,15 @@ export default async function Home({
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                   />
                 </div>
-                <h2 className="text-lg font-semibold text-center line-clamp-2" title={book.title}>{book.title}</h2>
-                <p className="text-sm text-gray-500 text-center mt-2">
+                <h2 className="text-lg font-semibold text-center line-clamp-2 text-gray-900 group-hover:text-blue-600 transition-colors" title={book.title}>{book.title}</h2>
+                <p className="text-sm text-gray-600 text-center mt-2 font-medium">
                   {book.authors?.map((a: { name: string }) => a.name).join(', ') || 'Unknown Author'}
                 </p>
               </div>
             </Link>
           ))}
           {books.length === 0 && (
-            <div className="col-span-full text-center text-gray-500 py-12">
+            <div className="col-span-full text-center text-gray-600 font-medium py-12">
               No books found for &quot;{searchQuery}&quot;
             </div>
           )}

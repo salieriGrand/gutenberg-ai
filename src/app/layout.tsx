@@ -40,10 +40,10 @@ export default async function RootLayout({
             <Link href="/" className="font-bold text-xl text-blue-600">Library</Link>
             <div className="flex items-center gap-4">
               {data.user ? (
-                <div className="flex items-center gap-4">
-                  Hey, {data.user.email}!
+                <div className="flex items-center gap-4 text-gray-900">
+                  <span>Hey, <span className="font-semibold">{data.user.email}</span>!</span>
                   <form action={signout}>
-                    <button className="py-2 px-4 rounded-md no-underline bg-gray-200 hover:bg-gray-300">
+                    <button className="py-2 px-4 rounded-md no-underline bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium border border-gray-300 transition-colors">
                       Logout
                     </button>
                   </form>

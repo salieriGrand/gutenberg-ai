@@ -48,20 +48,18 @@ export default async function ReadBookPage({
     );
   }
 
-  const proxyUrl = htmlFormatUrl.replace('https://www.gutenberg.org/', '/read/');
-
   return (
     <div className="flex min-h-screen bg-white">
       {/* Left side: Book Content in iframe */}
       <div className="flex-1 flex flex-col border-r h-screen overflow-hidden">
-        <div className="p-4 border-b bg-gray-50 flex items-center gap-4">
+        <div className="p-4 border-b bg-white flex items-center gap-4">
           <Link href={`/books/${id}`} className="text-blue-600 hover:underline">
             &larr; Back
           </Link>
-          <h1 className="text-xl font-bold truncate flex-1">{book.title}</h1>
+          <h1 className="text-xl font-bold truncate flex-1 text-gray-900">{book.title}</h1>
         </div>
         <iframe
-          src={proxyUrl}
+          src={htmlFormatUrl}
           className="w-full flex-1 border-none"
           title={`Read ${book.title}`}
           sandbox="allow-same-origin allow-scripts"
@@ -69,11 +67,11 @@ export default async function ReadBookPage({
       </div>
 
       {/* Right side: Chatbot */}
-      <div className="w-[400px] flex flex-col h-screen bg-gray-50">
+      <div className="w-[400px] flex flex-col h-screen bg-white">
         <div className="p-4 border-b bg-white">
-          <h2 className="text-lg font-semibold">Discuss this Book</h2>
+          <h2 className="text-lg font-semibold text-gray-900">Discuss this Book</h2>
         </div>
-        <div className="flex-1 p-4 overflow-hidden">
+        <div className="flex-1 p-4 overflow-hidden bg-gray-50">
            <Chat bookContext={book} />
         </div>
       </div>

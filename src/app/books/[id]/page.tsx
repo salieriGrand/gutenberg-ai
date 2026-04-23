@@ -45,18 +45,18 @@ export default async function BookDetailsPage({
             <h1 className="text-4xl font-bold">{book.title}</h1>
 
             <div>
-              <h2 className="text-xl font-semibold text-gray-700">Author(s)</h2>
-              <p className="text-lg">
+              <h2 className="text-xl font-semibold text-gray-900">Author(s)</h2>
+              <p className="text-lg text-gray-900">
                 {book.authors?.map((a: { name: string }) => a.name).join(', ') || 'Unknown Author'}
               </p>
             </div>
 
             {book.subjects && book.subjects.length > 0 && (
               <div>
-                <h2 className="text-xl font-semibold text-gray-700">Subjects</h2>
+                <h2 className="text-xl font-semibold text-gray-900">Subjects</h2>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {book.subjects.map((subject: string, idx: number) => (
-                    <span key={idx} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-600">
+                    <span key={idx} className="bg-gray-200 px-3 py-1 rounded-full text-sm text-gray-800 border border-gray-300">
                       {subject}
                     </span>
                   ))}
@@ -66,26 +66,26 @@ export default async function BookDetailsPage({
 
             {book.summaries && book.summaries.length > 0 && (
               <div>
-                <h2 className="text-xl font-semibold text-gray-700">Summary</h2>
-                <p className="text-gray-800 leading-relaxed mt-2 whitespace-pre-line">
+                <h2 className="text-xl font-semibold text-gray-900">Summary</h2>
+                <p className="text-gray-900 leading-relaxed mt-2 whitespace-pre-line">
                   {book.summaries[0]}
                 </p>
               </div>
             )}
 
             <div>
-              <h2 className="text-xl font-semibold text-gray-700 mt-4 mb-2">Read Online</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mt-4 mb-2">Read Online</h2>
               {user ? (
                 <Link
                   href={`/books/${id}/read`}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors inline-block font-semibold"
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors inline-block font-semibold shadow-sm"
                 >
                   Read Book & Chat
                 </Link>
               ) : (
                 <div className="bg-gray-100 p-4 rounded-lg inline-block border border-gray-200">
-                  <p className="text-gray-700 mb-2">Login to read this book online and discuss it with our AI.</p>
-                  <Link href="/login" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors inline-block text-sm">
+                  <p className="text-gray-800 mb-3 font-medium">Login to read this book online and discuss it with our AI.</p>
+                  <Link href="/login" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors inline-block text-sm font-semibold">
                     Log In to Read
                   </Link>
                 </div>
