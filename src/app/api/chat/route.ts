@@ -1,5 +1,6 @@
 import { streamText, Message } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { createClient } from '@/utils/supabase/server';
 
 const google = createGoogleGenerativeAI({
   apiKey: process.env.GOOGLE_GEMINI_API_KEY,
@@ -9,6 +10,13 @@ const google = createGoogleGenerativeAI({
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return new Response('Unauthorized', { status: 401 });
+  }
+
   const { messages, bookContext } = await req.json();
 
   const systemMessage: Message = {
