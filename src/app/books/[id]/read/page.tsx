@@ -29,14 +29,9 @@ export default async function ReadBookPage({
   const book = await res.json();
 
   // Find the HTML format URL to embed
-  let htmlFormatUrl = Object.entries(book.formats).find(([format, url]) =>
+  const htmlFormatUrl = Object.entries(book.formats).find(([format, url]) =>
     typeof url === 'string' && format.includes('text/html')
   )?.[1] as string | undefined;
-
-  // Ensure HTTPS for mixed content issues
-  if (htmlFormatUrl?.startsWith('http://')) {
-    htmlFormatUrl = htmlFormatUrl.replace('http://', 'https://');
-  }
 
   if (!htmlFormatUrl) {
     return (
@@ -53,6 +48,9 @@ export default async function ReadBookPage({
     );
   }
 
+  // Use reverse proxy to handle mixed content/redirect issues
+  const proxyUrl = htmlFormatUrl.replace('https://www.gutenberg.org/', '/read/').replace('http://www.gutenberg.org/', '/read/');
+
   return (
     <div className="flex min-h-screen bg-white">
       {/* Left side: Book Content in iframe */}
@@ -64,7 +62,7 @@ export default async function ReadBookPage({
           <h1 className="text-xl font-bold truncate flex-1 text-gray-900">{book.title}</h1>
         </div>
         <iframe
-          src={htmlFormatUrl}
+          src={proxyUrl}
           className="w-full flex-1 border-none"
           title={`Read ${book.title}`}
           sandbox="allow-same-origin allow-scripts"
