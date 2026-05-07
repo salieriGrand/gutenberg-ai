@@ -12,7 +12,8 @@ export default async function ReadBookPage({
   const { id } = await params;
 
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: authData } = await supabase.auth.getUser();
+  const user = authData?.user;
 
   if (!user) {
     redirect('/login');
@@ -29,13 +30,17 @@ export default async function ReadBookPage({
 
   const book = await res.json();
 
-  // Record reading progress
-  await recordReadingProgress(
-    book.id,
-    book.title,
-    book.authors?.map((a: { name: string }) => a.name).join(', ') || 'Unknown Author',
-    book.formats['image/jpeg'] || ''
-  );
+  // Record reading progress (wrapped in try-catch so it doesn't crash the page)
+  try {
+    await recordReadingProgress(
+      book.id,
+      book.title,
+      book.authors?.map((a: { name: string }) => a.name).join(', ') || 'Unknown Author',
+      book.formats['image/jpeg'] || ''
+    );
+  } catch (error) {
+    console.error('Failed to record reading progress:', error);
+  }
 
   // Find the HTML format URL to embed
   const htmlFormatUrl = Object.entries(book.formats).find(([format, url]) =>
