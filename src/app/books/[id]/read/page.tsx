@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import Chat from '@/components/Chat';
 import { createClient } from '@/utils/supabase/server';
+import { recordReadingProgress } from '@/app/books/actions';
 
 export default async function ReadBookPage({
   params,
@@ -27,6 +28,14 @@ export default async function ReadBookPage({
   }
 
   const book = await res.json();
+
+  // Record reading progress
+  await recordReadingProgress(
+    book.id,
+    book.title,
+    book.authors?.map((a: { name: string }) => a.name).join(', ') || 'Unknown Author',
+    book.formats['image/jpeg'] || ''
+  );
 
   // Find the HTML format URL to embed
   const htmlFormatUrl = Object.entries(book.formats).find(([format, url]) =>
