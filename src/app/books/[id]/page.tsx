@@ -9,7 +9,7 @@ export default async function BookDetailsPage({
 }) {
   const { id } = await params;
 
-  const res = await fetch(`https://gutendex.com/books/${id}`);
+  const res = await fetch(`https://gutendex.com/books/${id}`, { next: { revalidate: 3600 } });
 
   if (!res.ok) {
     if (res.status === 404) {

@@ -19,7 +19,7 @@ export default async function ReadBookPage({
     redirect('/login');
   }
 
-  const res = await fetch(`https://gutendex.com/books/${id}`);
+  const res = await fetch(`https://gutendex.com/books/${id}`, { next: { revalidate: 3600 } });
 
   if (!res.ok) {
     if (res.status === 404) {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 
 interface PaginationProps {
   currentPage: number;
@@ -13,6 +13,7 @@ export default function Pagination({ currentPage, totalPages, searchQuery }: Pag
   const router = useRouter();
   const searchParams = useSearchParams();
   const [jumpPage, setJumpPage] = useState(currentPage.toString());
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     setJumpPage(currentPage.toString());
@@ -29,7 +30,9 @@ export default function Pagination({ currentPage, totalPages, searchQuery }: Pag
 
   const handlePageChange = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
-      router.push(createPageUrl(pageNumber));
+      startTransition(() => {
+        router.push(createPageUrl(pageNumber));
+      });
     }
   };
 
@@ -66,12 +69,12 @@ export default function Pagination({ currentPage, totalPages, searchQuery }: Pag
   const visiblePages = getVisiblePages();
 
   return (
-    <div className="flex flex-col items-center gap-6 mt-12 w-full max-w-5xl">
+    <div className={`flex flex-col items-center gap-6 mt-12 w-full max-w-5xl transition-opacity duration-200 ${isPending ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
       <div className="flex items-center gap-2">
         {/* Previous Button */}
         <button
           onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage <= 1}
+          disabled={currentPage <= 1 || isPending}
           className="p-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
           aria-label="Previous Page"
         >
@@ -86,7 +89,8 @@ export default function Pagination({ currentPage, totalPages, searchQuery }: Pag
             <>
               <button
                 onClick={() => handlePageChange(1)}
-                className="w-10 h-10 rounded-lg flex items-center justify-center border border-gray-300 bg-white hover:bg-gray-50 transition-colors shadow-sm text-sm font-medium"
+                disabled={isPending}
+                className="w-10 h-10 rounded-lg flex items-center justify-center border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm text-sm font-medium"
               >
                 1
               </button>
@@ -98,7 +102,8 @@ export default function Pagination({ currentPage, totalPages, searchQuery }: Pag
             <button
               key={page}
               onClick={() => handlePageChange(page)}
-              className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-all shadow-sm text-sm font-semibold ${
+              disabled={isPending}
+              className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-all shadow-sm text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 ${
                 currentPage === page
                   ? 'bg-blue-600 border-blue-600 text-white'
                   : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -113,7 +118,8 @@ export default function Pagination({ currentPage, totalPages, searchQuery }: Pag
               {visiblePages[visiblePages.length - 1] < totalPages - 1 && <span className="px-1 text-gray-400">...</span>}
               <button
                 onClick={() => handlePageChange(totalPages)}
-                className="w-10 h-10 rounded-lg flex items-center justify-center border border-gray-300 bg-white hover:bg-gray-50 transition-colors shadow-sm text-sm font-medium"
+                disabled={isPending}
+                className="w-10 h-10 rounded-lg flex items-center justify-center border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm text-sm font-medium"
               >
                 {totalPages}
               </button>
@@ -124,7 +130,7 @@ export default function Pagination({ currentPage, totalPages, searchQuery }: Pag
         {/* Next Button */}
         <button
           onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage >= totalPages}
+          disabled={currentPage >= totalPages || isPending}
           className="p-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
           aria-label="Next Page"
         >
