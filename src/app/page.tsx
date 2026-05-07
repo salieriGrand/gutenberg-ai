@@ -35,6 +35,9 @@ export default async function Home({
       const cachedData = await getCachedBooks();
       if (cachedData) {
         books = cachedData;
+        // Gutendex usually has ~73k books, we can use a hardcoded fallback count for the default page 1 cache
+        // or just let it update on the next fetch.
+        count = 73500; 
       }
     }
 
@@ -45,18 +48,19 @@ export default async function Home({
       if (currentPage > 1) params.append('page', currentPage.toString());
       
       const url = `${baseUrl}${params.toString() ? `?${params.toString()}` : ''}`;
-      const res = await fetch(url);
-      const data = await res.json();
-      books = data.results || [];
-      count = data.count || 0;
+      
+      try {
+        const res = await fetch(url, { next: { revalidate: 3600 } }); // Add Next.js cache
+        const data = await res.json();
+        books = data.results || [];
+        count = data.count || 0;
 
-      if (!searchQuery && currentPage === 1 && books.length > 0) {
-        await setCachedBooks(books);
+        if (!searchQuery && currentPage === 1 && books.length > 0) {
+          await setCachedBooks(books);
+        }
+      } catch (err) {
+        console.error('Fetch error:', err);
       }
-    } else {
-      const res = await fetch('https://gutendex.com/books/');
-      const data = await res.json();
-      count = data.count || 0;
     }
   }
 
